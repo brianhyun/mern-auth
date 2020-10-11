@@ -26,4 +26,8 @@ db.once('open', function () {
     console.log('App successfully connected to mongoose...');
 });
 
+app.get('/', (req, res, next) => {
+    res.send('Hello!');
+});
+
 app.listen(port, () => console.log(`Server up and running on port ${port}...`));
