@@ -1,12 +1,15 @@
 if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').parse();
+    require('dotenv').config();
 }
 
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const passport = require('passport');
 
-const port = process.env.PORT || 3000;
+const users = require('./routes/api/users');
+
+const port = process.env.PORT || 4000;
 
 const app = express();
 
@@ -26,8 +29,13 @@ db.once('open', function () {
     console.log('App successfully connected to mongoose...');
 });
 
-app.get('/', (req, res, next) => {
-    res.send('Hello!');
-});
+// Passport Middleware
+app.use(passport.initialize());
+
+// Passport Config
+require('./config/passport')(passport);
+
+// Routes
+app.use('/api/users', users);
 
 app.listen(port, () => console.log(`Server up and running on port ${port}...`));
